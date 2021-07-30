@@ -5,8 +5,11 @@ module.exports = {
             const { siteid } = req.query;
             try {
                 const sites = siteid !== undefined ? await db.Site.findAll({
+                    attributes: ['SiteID', 'ClientID', 'Site', 'Description', 'Address', 'AptSuite', 'City', 'State', 'PostalCode', 'IsActive', 'IsDeleted'],
                     where: { SiteID: siteid, IsActive: true, IsDeleted: false }
-                }) : await db.Site.findAll();
+                }) : await db.Site.findAll({
+                    attributes: ['SiteID', 'ClientID', 'Site', 'Description', 'Address', 'AptSuite', 'City', 'State', 'PostalCode', 'IsActive', 'IsDeleted']
+                });
                 if (sites.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: sites });
                 } else {
@@ -88,7 +91,7 @@ module.exports = {
                             PostalCode: postalcode
                         },
                         {
-                            where: { SiteID: siteid, IsActive: true, IsDeleted: false }
+                            where: { SiteID: siteid }
                         }
                     );
                     if (updateRecords !== null) {
