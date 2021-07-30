@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "dba_asset",
+    "password": "ATSPL@Aco007!",
+    "database": "db_assetmanagement",
+    "host": "103.48.51.194",
+    "dialect": "mysql",
+    "operatorsAliases": 0
+  },
+  "test": {
+    "username": "dba_asset",
+    "password": "ATSPL@Aco007!",
+    "database": "db_assetmanagement",
+    "host": "103.48.51.194",
+    "dialect": "mysql",
+    "operatorsAliases": 0
+  },
+  "production": {
+    "username": "dba_asset",
+    "password": "ATSPL@Aco007!",
+    "database": "db_assetmanagement",
+    "host": "103.48.51.194",
+    "dialect": "mysql",
+    "operatorsAliases": 0
+  }
+}
