@@ -5,10 +5,10 @@ module.exports = {
             const { deptid } = req.query;
             try {
                 const department = deptid !== undefined ? await db.department.findAll({
-                    attributes: ['DeptID', 'ClientID', 'Department', 'IsActive', 'IsDeleted'],
+                    attributes: ['DeptID', 'ClientID', 'Department', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
                     where: { DeptID: deptid, IsActive: true, IsDeleted: false }
                 }) : await db.department.findAll({
-                    attributes: ['DeptID', 'ClientID', 'Department', 'IsActive', 'IsDeleted']
+                    attributes: ['DeptID', 'ClientID', 'Department', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn']
                 });
                 if (department.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: department });
@@ -34,7 +34,7 @@ module.exports = {
                         res.status(400).send({ 'message': 'Error in inserting data' });
                     }
                 } else {
-                    res.status(400).send({ 'message': 'One or more mndatory fields are empty' });
+                    res.status(400).send({ 'message': 'One or more mandatory fields are empty' });
                 }
             } catch (e) {
                 console.log(e);
@@ -46,7 +46,8 @@ module.exports = {
             try {
                 const updateRecords = await db.department.update(
                     {
-                        IsDeleted: true
+                        IsDeleted: true,
+                        ModifiedOn: new Date().toISOString()
                     },
                     {
                         where: { DeptID: deptid }
@@ -70,10 +71,11 @@ module.exports = {
                     const updateRecords = await db.department.update(
                         {
                             ClientID: clientid,
-                            Department: department
+                            Department: department,
+                            ModifiedOn: new Date().toISOString()
                         },
                         {
-                            where: { SiteID: siteid, IsActive: true, IsDeleted: false }
+                            where: { SiteID: siteid }
                         }
                     );
                     if (updateRecords !== null) {
@@ -82,7 +84,7 @@ module.exports = {
                         res.status(400).send({ 'message': 'Error in updating department data' });
                     }
                 } else {
-                    res.status(400).send({ 'message': 'One or more mndatory fields are empty' });
+                    res.status(400).send({ 'message': 'One or more mandatory fields are empty' });
                 }
             } catch (e) {
                 console.log(e);

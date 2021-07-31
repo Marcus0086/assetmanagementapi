@@ -30,4 +30,14 @@ router.route('/brand').get(ApiService.CRUDBrand.getBrand);
 router.route('/brand').post(ApiService.CRUDBrand.newBrand);
 router.route('/brand').delete(ApiService.CRUDBrand.deleteBrand);
 router.route('/brand').patch(ApiService.CRUDBrand.updateBrand);
+
+router.route('/client').get(ApiService.CRUDClient.getClient);
+router.route('/client').post(ApiService.CRUDClient.newClient);
+router.route('/client').delete(ApiService.CRUDClient.deleteClient);
+router.route('/client').patch(ApiService.CRUDClient.updateClient);
+
+router.route('/user').get(ApiService.CRUDUser.getUser);
+router.route('/user').post(ApiService.CRUDUser.newUser);
+router.route('/user').delete(ApiService.CRUDUser.deleteUser);
+router.route('/user').patch(ApiService.CRUDUser.updateUser);
 module.exports = router;

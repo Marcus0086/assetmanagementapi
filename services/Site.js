@@ -5,10 +5,12 @@ module.exports = {
             const { siteid } = req.query;
             try {
                 const sites = siteid !== undefined ? await db.Site.findAll({
-                    attributes: ['SiteID', 'ClientID', 'Site', 'Description', 'Address', 'AptSuite', 'City', 'State', 'PostalCode', 'IsActive', 'IsDeleted'],
+                    attributes: ['SiteID', 'ClientID', 'Site', 'Description', 'Address',
+                        'AptSuite', 'City', 'State', 'PostalCode', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
                     where: { SiteID: siteid, IsActive: true, IsDeleted: false }
                 }) : await db.Site.findAll({
-                    attributes: ['SiteID', 'ClientID', 'Site', 'Description', 'Address', 'AptSuite', 'City', 'State', 'PostalCode', 'IsActive', 'IsDeleted']
+                    attributes: ['SiteID', 'ClientID', 'Site', 'Description', 'Address', 'AptSuite',
+                        'City', 'State', 'PostalCode', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn']
                 });
                 if (sites.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: sites });
@@ -43,7 +45,7 @@ module.exports = {
                         res.status(400).send({ 'message': 'Error in inserting data' });
                     }
                 } else {
-                    res.status(400).send({ 'message': 'One or more mndatory fields are empty' });
+                    res.status(400).send({ 'message': 'One or more mandatory fields are empty' });
                 }
             } catch (e) {
                 console.log(e);
@@ -55,7 +57,8 @@ module.exports = {
             try {
                 const updateRecords = await db.Site.update(
                     {
-                        IsDeleted: true
+                        IsDeleted: true,
+                        ModifiedOn: new Date().toISOString()
                     },
                     {
                         where: { SiteID: siteid }
@@ -88,7 +91,8 @@ module.exports = {
                             AptSuite: aptsuite,
                             City: city,
                             State: state,
-                            PostalCode: postalcode
+                            PostalCode: postalcode,
+                            ModifiedOn: new Date().toISOString()
                         },
                         {
                             where: { SiteID: siteid }
@@ -100,7 +104,7 @@ module.exports = {
                         res.status(400).send({ 'message': 'Error in updating site data' });
                     }
                 } else {
-                    res.status(400).send({ 'message': 'One or more mndatory fields are empty' });
+                    res.status(400).send({ 'message': 'One or more mandatory fields are empty' });
                 }
             } catch (e) {
                 console.log(e);

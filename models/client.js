@@ -17,7 +17,8 @@ module.exports = function (sequelize, DataTypes) {
     },
     ContactEmail: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: true,
+      unique: "ContactEmail"
     },
     ContactPhone: {
       type: DataTypes.STRING(50),
@@ -54,6 +55,14 @@ module.exports = function (sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "ClientID" },
+          {
+            name: "ContactEmail",
+            unique: true,
+            using: "BTREE",
+            fields: [
+              { name: "ContactEmail" },
+            ]
+          },
         ]
       },
     ]
