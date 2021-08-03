@@ -10,7 +10,8 @@ module.exports = {
                     where: { ClientID: clientid, IsActive: true, IsDeleted: false }
                 }) : await db.client.findAll({
                     attributes: ['ClientID', 'ClientName', 'ContactName', 'ContactEmail', 'ContactPhone',
-                        'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn']
+                        'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
+                    where: { IsActive: true, IsDeleted: false }
                 });
                 if (clients.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: clients });

@@ -10,7 +10,8 @@ module.exports = {
                     where: { SiteID: siteid, IsActive: true, IsDeleted: false }
                 }) : await db.Site.findAll({
                     attributes: ['SiteID', 'ClientID', 'Site', 'Description', 'Address', 'AptSuite',
-                        'City', 'State', 'PostalCode', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn']
+                        'City', 'State', 'PostalCode', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
+                    where: { IsActive: true, IsDeleted: false }
                 });
                 if (sites.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: sites });

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const ApiService = require('../services/ApiService');
+
+//CRUD APIs'
 router.route('/sites').get(ApiService.CRUDSite.getSite);
 router.route('/sites').post(ApiService.CRUDSite.postSite);
 router.route('/sites').delete(ApiService.CRUDSite.deleteSite);
@@ -40,4 +42,9 @@ router.route('/user').get(ApiService.CRUDUser.getUser);
 router.route('/user').post(ApiService.CRUDUser.newUser);
 router.route('/user').delete(ApiService.CRUDUser.deleteUser);
 router.route('/user').patch(ApiService.CRUDUser.updateUser);
+
+//Mobile APIs'
+router.route('/mobile/login').post(ApiService.LoginService.login);
+router.route('/mobile/scanAsset').post(ApiService.scanAssets);
+
 module.exports = router;

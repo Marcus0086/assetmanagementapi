@@ -8,7 +8,8 @@ module.exports = {
                     attributes: ['DeptID', 'ClientID', 'Department', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
                     where: { DeptID: deptid, IsActive: true, IsDeleted: false }
                 }) : await db.department.findAll({
-                    attributes: ['DeptID', 'ClientID', 'Department', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn']
+                    attributes: ['DeptID', 'ClientID', 'Department', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
+                    where: { IsActive: true, IsDeleted: false }
                 });
                 if (department.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: department });

@@ -8,7 +8,8 @@ module.exports = {
                     attributes: ['BrandID', 'ClientID', 'Brand', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
                     where: { BrandID: brandid, IsActive: true, IsDeleted: false }
                 }) : await db.brand.findAll({
-                    attributes: ['BrandID', 'ClientID', 'Brand', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn']
+                    attributes: ['BrandID', 'ClientID', 'Brand', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
+                    where: { IsActive: true, IsDeleted: false }
                 });
                 if (brand.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: brand });

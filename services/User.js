@@ -6,10 +6,15 @@ module.exports = {
             const { userid } = req.query;
             try {
                 const users = userid !== undefined ? await db.user.findAll({
-                    attributes: ['UserID', 'ClientID', 'Name', 'Role', 'Email', 'Mobile', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
+                    attributes: ['UserID', 'ClientID', 'EmpCode', 'Name', 'Type', 'Role', 'Email',
+                        'AllowAppLogin', 'DeptID',
+                        'Mobile', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
                     where: { UserID: userid, IsActive: true, IsDeleted: false }
                 }) : await db.user.findAll({
-                    attributes: ['UserID', 'ClientID', 'Name', 'Role', 'Email', 'Mobile', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn']
+                    attributes: ['UserID', 'ClientID', 'EmpCode', 'Name', 'Type', 'Role', 'Email',
+                        'AllowAppLogin', 'DeptID',
+                        'Mobile', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
+                    where: { IsActive: true, IsDeleted: false }
                 });
                 if (users.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: users });
@@ -22,17 +27,23 @@ module.exports = {
             }
         },
         newUser: async (req, res) => {
-            const { clientid, name, role, email, password, mobile } = req.body;
+            const { clientid, empcode, name, type, role, email, allowapplogin, deptid, password, mobile } = req.body;
             try {
                 if (clientid !== undefined && name !== undefined &&
+                    empcode !== undefined && type !== undefined &&
                     role !== undefined && email !== undefined &&
+                    allowapplogin !== undefined && deptid !== undefined &&
                     password !== undefined && mobile !== undefined) {
                     const hashpassword = await bcrypt.hash(password, 10);
                     const postres = await db.user.create({
                         ClientID: clientid,
                         Name: name,
+                        EmpCode: empcode,
+                        Type: type,
                         Role: role,
                         Email: email,
+                        AllowAppLogin: allowapplogin,
+                        DeptID: deptid,
                         Password: hashpassword,
                         Mobile: mobile
                     });
@@ -73,18 +84,21 @@ module.exports = {
         },
         updateUser: async (req, res) => {
             const { userid } = req.query;
-            const { clientid, name, role, email, password, mobile } = req.body;
+            const { clientid, empcode, name, type, role, allowapplogin, deptid, mobile } = req.body;
             try {
                 if (clientid !== undefined && name !== undefined &&
-                    role !== undefined && email !== undefined &&
-                    password !== undefined && mobile !== undefined) {
+                    empcode !== undefined && type !== undefined &&
+                    role !== undefined && allowapplogin !== undefined &&
+                    deptid !== undefined && mobile !== undefined) {
                     const updateRecords = await db.user.update(
                         {
-                            ClientID: clienid,
+                            ClientID: clientid,
                             Name: name,
+                            EmpCode: empcode,
+                            Type: type,
                             Role: role,
-                            Email: email,
-                            Password: hashpassword,
+                            AllowAppLogin: allowapplogin,
+                            DeptID: deptid,
                             Mobile: mobile
 
                         },

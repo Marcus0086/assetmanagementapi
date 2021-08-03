@@ -11,6 +11,7 @@ module.exports = {
                 }) : await db.category.findAll({
                     attributes: ['CategoryID', 'ClientID', 'Category', 'Description', 'OwnerDeptID',
                         'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
+                    where: { IsActive: true, IsDeleted: false }
                 });
                 if (categories.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: categories });

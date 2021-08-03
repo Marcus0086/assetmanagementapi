@@ -8,7 +8,8 @@ module.exports = {
                     attributes: ['LocationID', 'SiteID', 'Location', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
                     where: { LocationID: locationid, IsActive: true, IsDeleted: false }
                 }) : await db.location.findAll({
-                    attributes: ['LocationID', 'SiteID', 'Location', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn']
+                    attributes: ['LocationID', 'SiteID', 'Location', 'IsActive', 'IsDeleted', 'CreatedOn', 'ModifiedOn'],
+                    where: { IsActive: true, IsDeleted: false }
                 });
                 if (locations.length > 0) {
                     res.status(200).send({ 'message': 'Success', data: locations });

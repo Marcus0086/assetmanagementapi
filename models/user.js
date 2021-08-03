@@ -11,7 +11,15 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    EmpCode: {
+      type: DataTypes.STRING(20),
+      allowNull: true
+    },
     Name: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
+    Type: {
       type: DataTypes.STRING(50),
       allowNull: true
     },
@@ -28,8 +36,16 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: true
     },
+    AllowAppLogin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
     Password: {
       type: DataTypes.STRING(300),
+      allowNull: true
+    },
+    DeptID: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     IsActive: {
