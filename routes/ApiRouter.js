@@ -46,5 +46,5 @@ router.route('/user').patch(ApiService.CRUDUser.updateUser);
 //Mobile APIs'
 router.route('/mobile/login').post(ApiService.LoginService.login);
 router.route('/mobile/scanAsset').post(ApiService.scanAssets);
-
+router.route('/mobile/searchAsset').get(ApiService.searchAsset);
 module.exports = router;

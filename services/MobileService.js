@@ -94,18 +94,14 @@ module.exports = {
         try {
             const user = await db.user.findAll({ where: { UserID: userid } });
             if (user.length > 0) {
-                const asset = keyword !== undefined ? await db.asset.findAll({
-                    where: {
-                        AssetName: {
-                            [Op.like]: `%${keyword}%`
-                        },
-
-                    }
-                }) : await db.asset.findAll({});
+                const asset = await db.sequelize.query('CALL searchAsset(:keyword)', {
+                    replacements: { keyword: keyword !== undefined ? keyword : null }
+                });
                 if (asset.length > 0) {
-
+                    const nData = lowerKeys(asset);
+                    res.status(200).send({ status: 'Success', message: 'Asset Found', data: nData });
                 } else {
-
+                    res.status(400).send({ status: 'Fail', message: 'Asset not found', });
                 }
             } else {
                 res.status(400).send({ status: 'Fail', message: 'User Not Found', });

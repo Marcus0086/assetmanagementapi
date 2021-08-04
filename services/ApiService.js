@@ -6,7 +6,7 @@ const { CRUDSubCategory } = require('./SubCategory');
 const { CRUDBrand } = require('./Brand');
 const { CRUDClient } = require('./Client');
 const { CRUDUser } = require('./User');
-const { LoginService, scanAssets } = require('./MobileService');
+const { LoginService, scanAssets, searchAsset } = require('./MobileService');
 module.exports = {
     CRUDSite: CRUDSite,
     CRUDLocation: CRUDLocation,
@@ -18,4 +18,5 @@ module.exports = {
     CRUDUser: CRUDUser,
     LoginService: LoginService,
     scanAssets: scanAssets,
+    searchAsset: searchAsset,
 }
