@@ -4,6 +4,7 @@ const { Op, QueryTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const { sequelize } = require('../models/index');
 const { loadSqlQueries } = require('../db/utils');
+const date = require('date-fns');
 module.exports = {
     LoginService: {
         login: async (req, res) => {
@@ -52,8 +53,30 @@ module.exports = {
             }
         }
     },
-    verifyAudirPeriod: async (req, res) => {
-
+    verifyAuditPeriod: async (req, res) => {
+        const { userid } = req.body;
+        try {
+            if (userid !== undefined) {
+                const auditPeriod = await db.sequelize.query('CALL verifyAuditPeriod(:userid)', {
+                    replacements: { userid: userid }
+                });
+                if (auditPeriod.length > 0) {
+                    const { PeriodFrom, PeriodTo } = auditPeriod[0];
+                    const toDate = PeriodTo;
+                    const fromDate = PeriodFrom;
+                    const nDays = date.differenceInDays(new Date(toDate), new Date(fromDate));
+                    if (nDays >= 1) res.status(200).send({ status: 'Success', message: 'Audit Period is open' });
+                    else res.status(400).send({ status: 'Fail', message: 'Audit Period is closed' })
+                } else {
+                    res.status(400).send({ status: 'Fail', message: `data not found for userid:${userid}`, });
+                }
+            } else {
+                res.status(400).send({ 'message': 'Please enter a user id' });
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(500).send('Internal Server Error');
+        }
     },
     scanAssets: async (req, res) => {
         const { userid, assettag } = req.body;

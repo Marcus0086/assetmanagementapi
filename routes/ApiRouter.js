@@ -47,4 +47,5 @@ router.route('/user').patch(ApiService.CRUDUser.updateUser);
 router.route('/mobile/login').post(ApiService.LoginService.login);
 router.route('/mobile/scanAsset').post(ApiService.scanAssets);
 router.route('/mobile/searchAsset').get(ApiService.searchAsset);
+router.route('/mobile/verifyAuditPeriod').post(ApiService.verifyAuditPeriod);
 module.exports = router;
