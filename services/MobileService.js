@@ -133,5 +133,13 @@ module.exports = {
             console.log(e)
             res.status(500).send('Internal Server Error');
         }
+    },
+    addAsset: async (req, res) => {
+        try {
+
+        } catch (e) {
+            console.log(e)
+            res.status(500).send('Internal Server Error');
+        }
     }
 }
