@@ -5,7 +5,6 @@
     "database": "db_assetmanagement",
     "host": "103.48.51.194",
     "dialect": "mysql",
-    "logging": false,
     "operatorsAliases": 0
   },
   "test": {

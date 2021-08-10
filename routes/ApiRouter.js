@@ -48,4 +48,12 @@ router.route('/mobile/login').post(ApiService.LoginService.login);
 router.route('/mobile/scanAsset').post(ApiService.scanAssets);
 router.route('/mobile/searchAsset').get(ApiService.searchAsset);
 router.route('/mobile/verifyAuditPeriod').post(ApiService.verifyAuditPeriod);
+
+// dropdown APIs'
+router.route('/dropdown/site').get(ApiService.DropDownService.listSites);
+router.route('/dropdown/location').get(ApiService.DropDownService.listLocation);
+router.route('/dropdown/category').get(ApiService.DropDownService.listCategory);
+router.route('/dropdown/subcategory').get(ApiService.DropDownService.listSubcategory);
+router.route('/dropdown/department').get(ApiService.DropDownService.listDepartment);
+router.route('/dropdown/brand').get(ApiService.DropDownService.listBrand);
 module.exports = router;

@@ -7,6 +7,7 @@ const { CRUDBrand } = require('./Brand');
 const { CRUDClient } = require('./Client');
 const { CRUDUser } = require('./User');
 const { LoginService, scanAssets, searchAsset, verifyAuditPeriod } = require('./MobileService');
+const DropDownService = require('./dropDown');
 module.exports = {
     CRUDSite: CRUDSite,
     CRUDLocation: CRUDLocation,
@@ -20,4 +21,5 @@ module.exports = {
     scanAssets: scanAssets,
     searchAsset: searchAsset,
     verifyAuditPeriod: verifyAuditPeriod,
+    DropDownService: DropDownService,
 }

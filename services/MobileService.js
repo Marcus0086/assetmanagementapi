@@ -1,3 +1,4 @@
+"use strict"
 const db = require('../models/index');
 const { lowerKeys } = require('./lowerKeys');
 const { Op, QueryTypes } = require('sequelize');
@@ -135,8 +136,37 @@ module.exports = {
         }
     },
     addAsset: async (req, res) => {
+        const {
+            addedbyuserid, assetname, description, assettag, category, subcategory,
+            brand, model, serialnumber, purchasedate, purchasefrom, purchasecost, ponumber,
+            prnumber, siteid, locationid, deptid, issuedtouserid, issuedtoname, currentstatus
+        } = req.body;
         try {
+            if ([addedbyuserid, assetname, description, assettag, category, subcategory,
+                brand, model, serialnumber, purchasedate, purchasefrom, purchasecost, ponumber,
+                prnumber, siteid, locationid,
+                deptid, issuedtouserid, issuedtoname, currentstatus].every(val => val !== undefined)) {
+                const sqlQuery = await loadSqlQueries('model');
+                const user = await db.user.findAll({ where: { UserID: userid } });
+                if (user.length > 0) {
+                    const clientid = user.ClientID;
 
+                    const assetChange = await db.sequelize.query(sqlQuery.addAsset, {
+                        replacements: {
+                            ClientID: clientid, AssetName: assetname, Description: description, AssetTag: assettag,
+                            MaterialCode: null, SerialNo: serialnumber, BrandID,
+                            ModelNo, PurchaseDate, PurchaseFrom, PurchaseCost, PONo, PRNo, OwnerSiteID, OwnerLocationID,
+                            OwnerDeptID, CurrentSiteID, CurrentLocationID, CategoryID, SubCategoryID, DepreciationID,
+                            CurrentStatus, AssetCondition
+                        }
+                    })
+                } else {
+                    res.status(400).send({ status: 'Fail', message: 'User Not Found', });
+                }
+
+            } else {
+                res.status(400).send({ 'message': 'One or more mandatory fields are empty' });
+            }
         } catch (e) {
             console.log(e)
             res.status(500).send('Internal Server Error');

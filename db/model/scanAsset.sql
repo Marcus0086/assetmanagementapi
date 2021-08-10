@@ -1,4 +1,5 @@
-SELECT AssetID,AssetName,AssetTag, br.Brand,ast.ModelNo as Model,ct.Category, sct.SubCategory, st.Site, lc.Location, d.Department
+SELECT AssetID,AssetName,AssetTag, br.Brand,ast.ModelNo as Model,
+ct.Category, sct.SubCategory, st.Site, lc.Location, d.Department
 FROM asset ast
 INNER JOIN brand br ON ast.BrandID = br.BrandID
 INNER JOIN category ct ON ct.CategoryID =ast.CategoryID
