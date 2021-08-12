@@ -1,0 +1,2 @@
+INSERT INTO complaint(AssetID,ComplaintBy,ComplaintFor,ComplaintType,ComplaintDetails,CurrentStatus,CreatedOn,ModifiedOn)
+VALUES(:AssetID,:ComplaintBy,:ComplaintFor,:ComplaintType,:ComplaintDetails,:CurrentStatus,now(),now());

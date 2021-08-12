@@ -21,7 +21,8 @@ module.exports = function (sequelize, DataTypes) {
     },
     AssetTag: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: true,
+      unique: true
     },
     MaterialCode: {
       type: DataTypes.STRING(50),

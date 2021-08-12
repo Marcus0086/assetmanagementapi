@@ -137,35 +137,97 @@ module.exports = {
     },
     addAsset: async (req, res) => {
         const {
-            addedbyuserid, assetname, description, assettag, category, subcategory,
-            brand, model, serialnumber, purchasedate, purchasefrom, purchasecost, ponumber,
-            prnumber, siteid, locationid, deptid, issuedtouserid, issuedtoname, currentstatus
+            ClientID, AssetName, Description, AssetTag, MaterialCode, SerialNo, BrandID,
+            ModelNo, PurchaseDate, PurchaseFrom, PurchaseCost, PONo, PRNo, SiteID, LocationID,
+            DeptID, CategoryID, SubCategoryID, DepreciationID,
+            CurrentStatus, AssetCondition
         } = req.body;
         try {
-            if ([addedbyuserid, assetname, description, assettag, category, subcategory,
-                brand, model, serialnumber, purchasedate, purchasefrom, purchasecost, ponumber,
-                prnumber, siteid, locationid,
-                deptid, issuedtouserid, issuedtoname, currentstatus].every(val => val !== undefined)) {
+            if (Object.values(req.body).every(val => val !== undefined)) {
                 const sqlQuery = await loadSqlQueries('model');
-                const user = await db.user.findAll({ where: { UserID: userid } });
-                if (user.length > 0) {
-                    const clientid = user.ClientID;
-
-                    const assetChange = await db.sequelize.query(sqlQuery.addAsset, {
+                try {
+                    const assetAdd = await db.sequelize.query(sqlQuery.addAsset, {
                         replacements: {
-                            ClientID: clientid, AssetName: assetname, Description: description, AssetTag: assettag,
-                            MaterialCode: null, SerialNo: serialnumber, BrandID,
-                            ModelNo, PurchaseDate, PurchaseFrom, PurchaseCost, PONo, PRNo, OwnerSiteID, OwnerLocationID,
-                            OwnerDeptID, CurrentSiteID, CurrentLocationID, CategoryID, SubCategoryID, DepreciationID,
-                            CurrentStatus, AssetCondition
+                            ClientID: ClientID, AssetName: AssetName, Description: Description, AssetTag: AssetTag,
+                            MaterialCode: MaterialCode, SerialNo: SerialNo, BrandID: BrandID,
+                            ModelNo: ModelNo, PurchaseDate: PurchaseDate, PurchaseFrom: PurchaseFrom,
+                            PurchaseCost: PurchaseCost, PONo: PONo, PRNo: PRNo, OwnerSiteID: SiteID,
+                            OwnerLocationID: LocationID, OwnerDeptID: DeptID, CurrentSiteID: SiteID,
+                            CurrentLocationID: LocationID, CategoryID: CategoryID, SubCategoryID: SubCategoryID,
+                            DepreciationID: DepreciationID, CurrentStatus: CurrentStatus, AssetCondition: AssetCondition
                         }
-                    })
-                } else {
-                    res.status(400).send({ status: 'Fail', message: 'User Not Found', });
+                    });
+                    res.status(400).send({ status: 'Success', message: 'Asset Successfully added' });
+                } catch (err) {
+                    if (err.name === 'SequelizeUniqueConstraintError')
+                        res.status(400).send({ status: 'Fail', message: 'Asset already exist' });
                 }
 
             } else {
                 res.status(400).send({ 'message': 'One or more mandatory fields are empty' });
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(500).send('Internal Server Error');
+        }
+    },
+    assetComplaint: async (req, res) => {
+        const { assetname, category, subcategory, issues, issuesdetails,
+            clientid,
+            severity, altphoneno, location, time, image } = req.body;
+        try {
+            if ([assetname, category, subcategory, issues, issuesdetails,
+                severity, altphoneno, location, clientid, time, image].every(val => val !== undefined)) {
+                const sqlQuery = await loadSqlQueries('model');
+                const assetAvai = await db.sequelize.query(sqlQuery.complaint, {
+                    replacements: { AssetName: assetname, Category: category, SubCategory: subcategory }
+                });
+                if (assetAvai.length > 0) {
+                    const { AssetID } = assetAvai[0][0];
+                    const addComplaint = await db.sequelize.query(sqlQuery.addComplaint, {
+                        replacements: {
+                            AssetID: AssetID,
+                            ComplaintBy: clientid,
+                            ComplaintFor: AssetID,
+                            ComplaintType: issues,
+                            ComplaintDetails: issuesdetails,
+                            CurrentStatus: severity
+                        }
+                    });
+                    if (addComplaint) {
+                        res.status(400).send({ status: 'Success', message: 'Complaint Successfully added' });
+                    } else {
+                        res.status(400).send({ status: 'Fail', message: 'Error in adding complaint' });
+                    }
+                } else {
+                    res.status(400).send({ status: 'Fail', message: 'data not found' });
+                }
+            } else {
+                res.status(400).send({ 'message': 'One or more mandatory fields are empty' });
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(500).send('Internal Server Error');
+        }
+    },
+    getComplaint: async (req, res) => {
+        const { complaintid } = req.query;
+        try {
+            if (complaintid !== undefined) {
+                const complaints = await db.complaint.findAll({
+                    where: {
+                        ComplaintID: complaintid
+                    },
+                    attributes: ['ComplaintFor', 'CreatedOn', 'ComplaintType', 'CurrentStatus']
+                });
+                if (complaints.length > 0) {
+                    const nData = lowerKeys(complaints);
+                    res.status(400).send({ status: 'Success', data: nData });
+                } else {
+                    res.status(400).send({ status: 'Fail', message: 'data not found' });
+                }
+            } else {
+                res.status(400).send({ 'message': 'ClientID is empty' });
             }
         } catch (e) {
             console.log(e)
