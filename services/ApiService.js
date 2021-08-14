@@ -6,7 +6,8 @@ const { CRUDSubCategory } = require('./SubCategory');
 const { CRUDBrand } = require('./Brand');
 const { CRUDClient } = require('./Client');
 const { CRUDUser } = require('./User');
-const { LoginService, scanAssets, searchAsset, verifyAuditPeriod, addAsset, assetComplaint } = require('./MobileService');
+const { LoginService, scanAssets, searchAsset,
+    verifyAuditPeriod, addAsset, assetComplaint, getComplaint, auditHistory, completeAudit } = require('./MobileService');
 const DropDownService = require('./dropDown');
 module.exports = {
     CRUDSite: CRUDSite,
@@ -23,5 +24,8 @@ module.exports = {
     verifyAuditPeriod: verifyAuditPeriod,
     addAsset: addAsset,
     assetComplaint: assetComplaint,
+    auditHistory: auditHistory,
+    completeAudit: completeAudit,
+    getComplaint: getComplaint,
     DropDownService: DropDownService,
 }

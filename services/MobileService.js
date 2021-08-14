@@ -79,6 +79,73 @@ module.exports = {
             res.status(500).send('Internal Server Error');
         }
     },
+    completeAudit: async (req, res) => {
+        const {
+            assetid, uditbyuserid, auditdate, detailsmodifed, oldsite, newsite, oldlocation,
+            newlocation, olddepartment, newdepartment, oldissuedto, newissuedto
+        } = req.body;
+        try {
+            if ([assetid, uditbyuserid, auditdate, detailsmodifed, oldsite, newsite, oldlocation,
+                newlocation, olddepartment, newdepartment, oldissuedto, newissuedto].every(val => val !== undefined)) {
+
+            } else {
+                res.status(400).send({ 'message': 'One or more mandatory fields are empty' });
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(500).send('Internal Server Error');
+        }
+    },
+    auditHistory: async (req, res) => {
+        const { userid } = req.body;
+        try {
+            if (userid !== undefined) {
+                const sqlQuery = await loadSqlQueries('model');
+                const user = await db.user.findAll({
+                    where: {
+                        UserID: userid
+                    },
+                    attributes: ['ClientID']
+                });
+                if (user.length > 0) {
+                    const assetAudit = await db.sequelize.query(sqlQuery.assetAudit, {
+                        replacements: {
+                            auid: userid
+                        }
+                    });
+                    if (assetAudit[0].length > 0) {
+                        const auditPeriod = await db.sequelize.query(sqlQuery.getAudit, {
+                            replacements: {
+                                apid: assetAudit?.[0]?.[0]?.AuditPeriodID
+                            }
+                        });
+                        if (auditPeriod.length > 0) {
+                            res.status(200).send({
+                                'status': 'Success', message: 'Audit history found',
+                                history: [
+                                    {
+                                        ...auditPeriod[0][0],
+                                        data: [...assetAudit]
+                                    }
+                                ]
+                            })
+                        } else {
+                            res.status(400).send({ 'message': 'Audit History not found' });
+                        }
+                    } else {
+                        res.status(400).send({ 'message': 'Data not found' });
+                    }
+                } else {
+                    res.status(400).send({ 'message': 'Data not found' });
+                }
+            } else {
+                res.status(400).send({ 'message': 'Please enter a user id' });
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(500).send('Internal Server Error');
+        }
+    },
     scanAssets: async (req, res) => {
         const { userid, assettag } = req.body;
         try {
@@ -222,7 +289,7 @@ module.exports = {
                 });
                 if (complaints.length > 0) {
                     const nData = lowerKeys(complaints);
-                    res.status(400).send({ status: 'Success', data: nData });
+                    res.status(400).send({ ...nData[0] });
                 } else {
                     res.status(400).send({ status: 'Fail', message: 'data not found' });
                 }

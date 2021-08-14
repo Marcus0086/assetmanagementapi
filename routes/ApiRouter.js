@@ -50,6 +50,9 @@ router.route('/mobile/searchAsset').get(ApiService.searchAsset);
 router.route('/mobile/verifyAuditPeriod').post(ApiService.verifyAuditPeriod);
 router.route('/mobile/addAsset').post(ApiService.addAsset);
 router.route('/mobile/complaint').post(ApiService.assetComplaint);
+router.route('/mobile/mycomplaint').get(ApiService.getComplaint);
+router.route('/mobile/auditHistory').post(ApiService.auditHistory);
+router.route('/mobile/completeAudit').post(ApiService.completeAudit);
 // dropdown APIs'
 router.route('/dropdown/site').get(ApiService.DropDownService.listSites);
 router.route('/dropdown/location').get(ApiService.DropDownService.listLocation);

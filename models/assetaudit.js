@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('assetaudit', {
-    AuditlID: {
+    AuditID: {
       type: DataTypes.BIGINT,
       allowNull: true
     },
-    AssetAudit: {
+    AssetID: {
       type: DataTypes.BIGINT,
       allowNull: true
     },
@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    AuditByPeriodID: {
+    AuditByUserID: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
